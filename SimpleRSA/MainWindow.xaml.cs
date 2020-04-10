@@ -114,8 +114,8 @@ namespace SimpleRSA
         //MessageBox shown when key is being counted
         private void generateKeyButton_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("The key is being generated. This may take up to 20 seconds. " +
-                "Please wait patiently. When the key will be generated " +
+            MessageBox.Show("Press OK to generate a key. This may take up to 20 seconds. " +
+                "Please wait patiently. When the key will be generated " +  
                 "you will see green yes near the 'Key generated' " +
                 "text", "Please wait patiently", MessageBoxButton.OK);
             rsa.GenerateKey();
