@@ -4,7 +4,7 @@ using System.Text;
 using System.Security.Cryptography;
 using System.Numerics;
 
-namespace ConsoleRandomBigPrimes
+namespace SimpleRSA
 {
     class RandomPrimeNumber
     {

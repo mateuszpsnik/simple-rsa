@@ -20,9 +20,33 @@ namespace SimpleRSA
     /// </summary>
     public partial class MainWindow : Window
     {
+        RSA rsa;
         public MainWindow()
         {
             InitializeComponent();
+            rsa = new RSA();
+        }
+
+
+
+        private void loadButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void encryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void decryptButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void saveButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

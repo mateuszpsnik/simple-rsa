@@ -5,8 +5,41 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SimpleRSA"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="RSA" Height="450" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"/>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button x:Name="loadButton" Click="loadButton_Click">
+            <TextBlock TextWrapping="Wrap" FontSize="20">Load a text file</TextBlock>            
+        </Button>
+        <Button Grid.Column="1" x:Name="encryptButton" Click="encryptButton_Click">
+            <TextBlock TextWrapping="Wrap" FontSize="20">Encrypt the message</TextBlock>
+        </Button>
+        <Button Grid.Column="2" x:Name="decryptButton" Click="decryptButton_Click">
+            <TextBlock FontSize="20">Decrypt</TextBlock>
+        </Button>
+        <Button Grid.Column="3" x:Name="saveButton" Click="saveButton_Click">
+            <TextBlock TextWrapping="Wrap" FontSize="20" TextAlignment="Center">
+                Save the decrypted message</TextBlock>
+        </Button>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Grid.ColumnSpan="4">
+            <TextBlock Text="Key generated" FontSize="20" Margin="120, 20, 0, 0"/>
+            <TextBlock Text="no" Foreground="Red" FontSize="20" Margin="20, 20, 0, 0"
+                       x:Name="keyGeneratedInfoBlock"/>
+            <TextBlock Text="Message encrypted" FontSize="20" Margin="180, 20, 0, 0"/>
+            <TextBlock Text="no" Foreground="Red" FontSize="20" Margin="20, 20, 0, 0"
+                       x:Name="messageEncryptedInfoBlock"/>
+        </StackPanel>
+        <TextBlock Grid.Row="2" Text="aaa" Grid.ColumnSpan="4" x:Name="mainTextBlock"/>
     </Grid>
 </Window>

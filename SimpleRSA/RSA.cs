@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
 
-namespace ConsoleRandomBigPrimes
+namespace SimpleRSA
 {
     class EncryptionException : Exception
     {
@@ -12,11 +12,8 @@ namespace ConsoleRandomBigPrimes
 
     class RSA
     {
-        public RSA(string plaintext)
+        public RSA()
         {
-            //convert text to byte array
-            this.plaintext = Encoding.ASCII.GetBytes(plaintext);
-
             keyGenerated = false;
             messageEncrypted = false;
             generateKey();
@@ -24,7 +21,6 @@ namespace ConsoleRandomBigPrimes
 
         RandomPrimeNumber randomPrime = new RandomPrimeNumber();
 
-        byte[] plaintext;
         BigInteger ciphertext;
         string decryptedCiphertext;
         BigInteger p;
@@ -62,32 +58,35 @@ namespace ConsoleRandomBigPrimes
             //and should be similar in magnitude but differ in length by a few digits 
             //to make factoring harder
             p = randomPrime.Generate(128);
+            Console.WriteLine($"p = {p}"); //writes p to console so that we can check, if everything is ok
             q = randomPrime.Generate(124);
+            Console.WriteLine($"q = {q}");
             n = p * q;
+            Console.WriteLine($"n = {n}");
             phi = (p - 1) * (q - 1);
+            Console.WriteLine($"phi = {phi}");
 
             if (BigInteger.GreatestCommonDivisor(e, phi) == 1)
             {
                 d = inverse(e, phi);
+                Console.WriteLine($"d = {d}");
                 keyGenerated = true;
             }
-
-            //write the values to console
-            Console.WriteLine($"p = {p}");
-            Console.WriteLine($"q = {q}");
-            Console.WriteLine($"n = {n}");
-            Console.WriteLine($"phi = {phi}");
-            Console.WriteLine($"d = {d}");
         }
 
 
-        public void Encrypt()
+        public void Encrypt(string plaintext)
         {
+            byte[] plaintextAsBytes;
+
+            //convert text to byte array
+            plaintextAsBytes = Encoding.ASCII.GetBytes(plaintext);
+            
             if (!keyGenerated)
                 throw new EncryptionException("Key was not generated");
 
             //covert message from bytes to a number
-            BigInteger message = new BigInteger(plaintext);
+            BigInteger message = new BigInteger(plaintextAsBytes);
 
             if (message >= n)
                 throw new EncryptionException("Message is too long");
