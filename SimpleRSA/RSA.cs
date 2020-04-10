@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Numerics;
+using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace SimpleRSA
 {
@@ -16,7 +18,6 @@ namespace SimpleRSA
         {
             keyGenerated = false;
             messageEncrypted = false;
-            generateKey();
         }
 
         RandomPrimeNumber randomPrime = new RandomPrimeNumber();
@@ -32,9 +33,11 @@ namespace SimpleRSA
 
         bool keyGenerated;
         //here: event KeyGenerated
+        public event EventHandler KeyGenerated;
 
         bool messageEncrypted;
         //here: event MessageEncrypted
+        public event EventHandler MessageEncrypted;
 
 
         public BigInteger Ciphertext => ciphertext;
@@ -52,41 +55,42 @@ namespace SimpleRSA
 
             The pair (n, e) is the public key while d is the private key.
           */
-        private void generateKey()
+        public void GenerateKey()
         {
             //according to Wikipedia, p and q should be chosen at random, 
             //and should be similar in magnitude but differ in length by a few digits 
             //to make factoring harder
             p = randomPrime.Generate(128);
-            Console.WriteLine($"p = {p}"); //writes p to console so that we can check, if everything is ok
+            Debug.WriteLine($"p = {p}"); //writes p to output window so that we can check, if everything is ok
             q = randomPrime.Generate(124);
-            Console.WriteLine($"q = {q}");
+            Debug.WriteLine($"q = {q}");
             n = p * q;
-            Console.WriteLine($"n = {n}");
+            Debug.WriteLine($"n = {n}");
             phi = (p - 1) * (q - 1);
-            Console.WriteLine($"phi = {phi}");
+            Debug.WriteLine($"phi = {phi}");
 
             if (BigInteger.GreatestCommonDivisor(e, phi) == 1)
             {
                 d = inverse(e, phi);
-                Console.WriteLine($"d = {d}");
+                Debug.WriteLine($"d = {d}");
                 keyGenerated = true;
+                OnKeyGenerated(EventArgs.Empty);
             }
         }
 
 
-        public void Encrypt(string plaintext)
+        public void Encrypt(string inputText)
         {
-            byte[] plaintextAsBytes;
+            byte[] inputTextAsBytes;
 
             //convert text to byte array
-            plaintextAsBytes = Encoding.ASCII.GetBytes(plaintext);
+            inputTextAsBytes = Encoding.ASCII.GetBytes(inputText);
             
             if (!keyGenerated)
                 throw new EncryptionException("Key was not generated");
 
             //covert message from bytes to a number
-            BigInteger message = new BigInteger(plaintextAsBytes);
+            BigInteger message = new BigInteger(inputTextAsBytes);
 
             if (message >= n)
                 throw new EncryptionException("Message is too long");
@@ -94,6 +98,7 @@ namespace SimpleRSA
             //c = m^e (mod n)
             ciphertext = BigInteger.ModPow(message, e, n);
             messageEncrypted = true;
+            OnMessageEncrypted(EventArgs.Empty);
         }
 
         public void Decrypt(BigInteger ciphertext)
@@ -135,6 +140,16 @@ namespace SimpleRSA
                 x += m0;
 
             return x;
+        }
+
+        protected virtual void OnKeyGenerated(EventArgs e)
+        {
+            KeyGenerated?.Invoke(this, e);
+        }
+
+        protected virtual void OnMessageEncrypted(EventArgs e)
+        {
+            MessageEncrypted?.Invoke(this, e);
         }
     }
 }
