@@ -32,11 +32,9 @@ namespace SimpleRSA
         BigInteger d;
 
         bool keyGenerated;
-        //here: event KeyGenerated
         public event EventHandler KeyGenerated;
 
         bool messageEncrypted;
-        //here: event MessageEncrypted
         public event EventHandler MessageEncrypted;
 
 
@@ -76,6 +74,8 @@ namespace SimpleRSA
                 keyGenerated = true;
                 OnKeyGenerated(EventArgs.Empty);
             }
+
+            //In the future I will try to make these calculations asynchronously
         }
 
 
@@ -142,6 +142,8 @@ namespace SimpleRSA
             return x;
         }
 
+
+        //Methods used to invoke KeyGenerated and MessageEncrypted events 
         protected virtual void OnKeyGenerated(EventArgs e)
         {
             KeyGenerated?.Invoke(this, e);

@@ -29,6 +29,8 @@ namespace SimpleRSA
         {
             InitializeComponent();
 
+            initializeMainTextBlock();
+
             rsa.KeyGenerated += Rsa_KeyGenerated;
             rsa.MessageEncrypted += Rsa_MessageEncrypted;
         }
@@ -49,6 +51,7 @@ namespace SimpleRSA
 
         string inputText;
 
+        //open a text file and make the encryptButton visible
         private void loadButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
@@ -67,6 +70,7 @@ namespace SimpleRSA
             }
         }
 
+        //encrypt the inputText and save ciphertext as a hexadecimal number
         private void encryptButton_Click(object sender, RoutedEventArgs e)
         {
             rsa.Encrypt(inputText);
@@ -80,12 +84,14 @@ namespace SimpleRSA
             {
                 using (StreamWriter writer = new StreamWriter(dialog.FileName))
                 {
+                    writer.WriteLine("Ciphertext as a hexadecimal number:");
                     writer.WriteLine(rsa.Ciphertext.ToString("x"));
                 }
             }
 
         }
 
+        //decrypt the ciphertext and write the text to a file and closes the app
         private void decryptButton_Click(object sender, RoutedEventArgs e)
         {
             rsa.Decrypt(rsa.Ciphertext);
@@ -100,10 +106,12 @@ namespace SimpleRSA
                 using (StreamWriter writer = new StreamWriter(dialog.FileName))
                 {
                     writer.WriteLine(rsa.DecryptedCiphertext);
+                    this.Close();
                 }
             }
         }
 
+        //MessageBox shown when key is being counted
         private void generateKeyButton_Click(object sender, RoutedEventArgs e)
         {
             MessageBox.Show("The key is being generated. This may take up to 20 seconds. " +
@@ -111,6 +119,20 @@ namespace SimpleRSA
                 "you will see green yes near the 'Key generated' " +
                 "text", "Please wait patiently", MessageBoxButton.OK);
             rsa.GenerateKey();
+        }
+        
+        //fills the main textBlock with instructions on how to use the application
+        private void initializeMainTextBlock()
+        {
+            mainTextBlock.Text = "This program is a simple implementation of the RSA algorithm." +
+                Environment.NewLine + "1. Click on the button to generate a key. This may take " +
+                "some time. Other button are invisible now." + Environment.NewLine +
+                "2. Click on the load button and choose a text file. There should already be " +
+                "\"input.txt\" file in the folder to easily test the app." + Environment.NewLine +
+                "3. Click on the encrypt button to begin encryption. Then either choose a text file to " +
+                "save the ciphertext or just click on the save button." + Environment.NewLine +
+                "4. Now you can click on the decrypt button to check if encryption is correct. " +
+                "Similarly to the previous step, now you can save the text in a file." + Environment.NewLine;
         }
     }
 }

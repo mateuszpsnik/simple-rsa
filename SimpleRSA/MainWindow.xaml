@@ -40,6 +40,7 @@
             <TextBlock Text="no" Foreground="Red" FontSize="20" Margin="20, 20, 0, 0"
                        x:Name="messageEncryptedInfoBlock"/>
         </StackPanel>
-        <TextBlock Grid.Row="2" Text="aaa" Grid.ColumnSpan="4" x:Name="mainTextBlock"/>
+        <TextBlock TextWrapping="Wrap" FontSize="15" Grid.Row="2" Text="aaa" 
+                   Grid.ColumnSpan="4" x:Name="mainTextBlock" Margin="20"/>
     </Grid>
 </Window>
