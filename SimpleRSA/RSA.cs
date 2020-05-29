@@ -93,7 +93,7 @@ namespace SimpleRSA
             BigInteger message = new BigInteger(inputTextAsBytes);
 
             if (message >= n)
-                throw new EncryptionException("Message is too long");
+                throw new EncryptionException("The message is too long");
 
             //c = m^e (mod n)
             ciphertext = BigInteger.ModPow(message, e, n);
