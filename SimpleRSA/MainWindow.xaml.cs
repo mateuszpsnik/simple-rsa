@@ -73,20 +73,27 @@ namespace SimpleRSA
         //encrypt the inputText and save ciphertext as a hexadecimal number
         private void encryptButton_Click(object sender, RoutedEventArgs e)
         {
-            rsa.Encrypt(inputText);
-
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            dialog.Filter = "text files (*.txt)|*.txt";
-            dialog.FileName = "ciphertext";
-
-            if (dialog.ShowDialog() == true)
+            try
             {
-                using (StreamWriter writer = new StreamWriter(dialog.FileName))
+                rsa.Encrypt(inputText);
+
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                dialog.Filter = "text files (*.txt)|*.txt";
+                dialog.FileName = "ciphertext";
+
+                if (dialog.ShowDialog() == true)
                 {
-                    writer.WriteLine("Ciphertext as a hexadecimal number:");
-                    writer.WriteLine(rsa.Ciphertext.ToString("x"));
+                    using (StreamWriter writer = new StreamWriter(dialog.FileName))
+                    {
+                        writer.WriteLine("Ciphertext as a hexadecimal number:");
+                        writer.WriteLine(rsa.Ciphertext.ToString("x"));
+                    }
                 }
+            }
+            catch(EncryptionException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
 
         }
