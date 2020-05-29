@@ -101,20 +101,27 @@ namespace SimpleRSA
         //decrypt the ciphertext and write the text to a file and closes the app
         private void decryptButton_Click(object sender, RoutedEventArgs e)
         {
-            rsa.Decrypt(rsa.Ciphertext);
-
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
-            dialog.Filter = "text files (*.txt)|*.txt";
-            dialog.FileName = "output";
-
-            if (dialog.ShowDialog() == true)
+            try
             {
-                using (StreamWriter writer = new StreamWriter(dialog.FileName))
+                rsa.Decrypt(rsa.Ciphertext);
+
+                SaveFileDialog dialog = new SaveFileDialog();
+                dialog.InitialDirectory = AppDomain.CurrentDomain.BaseDirectory;
+                dialog.Filter = "text files (*.txt)|*.txt";
+                dialog.FileName = "output";
+
+                if (dialog.ShowDialog() == true)
                 {
-                    writer.WriteLine(rsa.DecryptedCiphertext);
-                    this.Close();
+                    using (StreamWriter writer = new StreamWriter(dialog.FileName))
+                    {
+                        writer.WriteLine(rsa.DecryptedCiphertext);
+                        this.Close();
+                    }
                 }
+            }
+            catch (EncryptionException ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
